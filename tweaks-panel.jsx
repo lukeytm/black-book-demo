@@ -173,7 +173,7 @@ function useTweaks(defaults) {
     // can react — the parent message only reaches the host, not peers.
     window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
   }, []);
-  return [values, setTweak];
+  return { ...values, setTweak };
 }
 
 // ── TweaksPanel ─────────────────────────────────────────────────────────────
