@@ -1,0 +1,365 @@
+/* Black Book — design tokens & base styles */
+
+:root {
+  /* Backgrounds — near-black warm charcoal, like a bound leather ledger */
+  --bg-primary: #0C0B09;
+  --bg-card: #17140F;
+  --bg-elevated: #221D16;
+  --bg-hover: #1C1810;
+
+  /* Accent — single brass/gold for key actions only */
+  --accent: #C9A84C;
+  --accent-glow: #DCBE6E;
+  --accent-subtle: rgba(201, 168, 76, 0.15);
+  --accent-faint: rgba(201, 168, 76, 0.07);
+  --accent-border: rgba(201, 168, 76, 0.4);
+
+  /* Silver — used for non-CTA emphasis, warmed to sit on charcoal */
+  --silver: #DCD6C7;
+  --silver-dim: #A39A87;
+
+  /* Text — warm ivory down to warm graphite */
+  --text-primary: #F3EFE6;
+  --text-secondary: #A79E8E;
+  --text-tertiary: #6E6656;
+
+  /* Heat — status indicators only, kept out of blue/purple territory */
+  --heat-warm: #4CA672;
+  --heat-cooling: #C9A84C;
+  --heat-cold: #C2665F;
+  --heat-dormant: #8C8168;
+
+  /* Borders */
+  --border-subtle: #2A241B;
+  --border-active: rgba(201, 168, 76, 0.4);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadows — restrained; depth over glow */
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 26px rgba(0,0,0,0.42);
+  --shadow-glow: 0 0 0 1px rgba(201,168,76,0.22), 0 6px 22px rgba(201,168,76,0.07);
+
+  /* Typography — editorial serif for headlines, clean sans for UI body */
+  --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  font-family: var(--font-body);
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  font-variant-ligatures: contextual;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+}
+
+[data-theme="light"] {
+  /* Backgrounds — warm parchment paper */
+  --bg-primary: #F3EEE2;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FDFBF6;
+  --bg-hover: #ECE5D4;
+
+  /* Accent text needs to darken to stay legible on paper; button fills
+     (--accent) stay identical across themes — it's the invariant brand color. */
+  --accent-glow: #8B6A22;
+
+  --silver-dim: #7A7362;
+
+  /* Text — warm ink down to warm taupe */
+  --text-primary: #241F17;
+  --text-secondary: #6B6353;
+  --text-tertiary: #948C7A;
+
+  /* Heat — deepened so status text still reads on a light surface */
+  --heat-warm: #2F7850;
+  --heat-cooling: #96721F;
+  --heat-cold: #A8483F;
+  --heat-dormant: #6B6248;
+
+  --border-subtle: #E4DCC8;
+
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 20px rgba(60,50,30,0.10);
+  --shadow-glow: 0 0 0 1px rgba(201,168,76,0.3), 0 4px 16px rgba(201,168,76,0.12);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 14px;
+}
+
+input, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #0F0B02;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.14) inset, 0 3px 10px rgba(201,168,76,0.16);
+}
+.btn-primary:hover {
+  background: var(--accent-glow);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 4px 16px rgba(201,168,76,0.2);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+.btn-ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.08);
+}
+.btn-block { width: 100%; }
+.btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
+.btn-lg { padding: 14px 20px; font-size: 15px; }
+
+/* Inputs */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.field-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 140ms, box-shadow 140ms;
+}
+.field-input:focus {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-faint);
+}
+.field-input::placeholder { color: var(--text-tertiary); }
+
+/* Pill selectors */
+.pill-row {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+.pill {
+  flex: 1;
+  padding: 9px 14px;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 140ms;
+  text-align: center;
+}
+.pill:hover { color: var(--text-primary); }
+.pill.active {
+  background: var(--accent);
+  color: #0F0B02;
+  font-weight: 600;
+}
+
+/* Section header (uppercase tracked) — stays sans even when set on an h2 */
+.section-header {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* Card */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition: background 180ms, border-color 180ms, transform 180ms;
+}
+.card-hover:hover {
+  background: var(--bg-hover);
+}
+
+/* Heat colors */
+.heat-warm { color: var(--heat-warm); }
+.heat-cooling { color: var(--heat-cooling); }
+.heat-cold { color: var(--heat-cold); }
+.heat-dormant { color: var(--heat-dormant); }
+
+.bg-heat-warm { background: var(--heat-warm); }
+.bg-heat-cooling { background: var(--heat-cooling); }
+.bg-heat-cold { background: var(--heat-cold); }
+.bg-heat-dormant { background: var(--heat-dormant); }
+
+/* Signal badge — dark with gold ◆ */
+.signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(201, 168, 76, 0.10);
+  color: var(--accent-glow);
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-align: left;
+}
+.signal-diamond {
+  color: var(--accent);
+  font-size: 9px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Scrollbar */
+.scroll-area {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+.scroll-area::-webkit-scrollbar { width: 8px; }
+.scroll-area::-webkit-scrollbar-track { background: transparent; }
+.scroll-area::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 8px;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+@keyframes slide-fade-out {
+  to { opacity: 0; transform: translateX(40px); max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+}
+.dismissing {
+  animation: slide-fade-out 360ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes fade-up {
+  0% { transform: translateY(8px); }
+  100% { transform: translateY(0); }
+}
+.fade-up {
+  animation: fade-up 420ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+@keyframes fade-in {
+  0% { transform: scale(0.985); }
+  100% { transform: scale(1); }
+}
+.fade-in {
+  animation: fade-in 320ms ease both;
+}
+
+/* Dot indicator (connection) */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-pulse {
+  position: relative;
+}
+.dot-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+  animation: dot-ping 2s ease-out infinite;
+}
+@keyframes dot-ping {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Animated ellipsis (scanning headline) */
+.bb-dots {
+  color: var(--accent-glow);
+  animation: bb-dots-pulse 1.4s ease-in-out infinite;
+}
+@keyframes bb-dots-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* Divider — subtle gold to transparent */
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-border) 0%, transparent 90%);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-subtle);
+  color: var(--text-primary);
+}

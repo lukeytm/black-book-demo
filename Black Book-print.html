@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>My Black Book — Design Overview</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+
+<style>
+  /* ── Print layout ────────────────────────────────── */
+  @page { size: landscape; margin: 0; }
+
+  html, body, #root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .print-page {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    break-after: page;
+  }
+  .print-page:last-child { break-after: avoid; }
+
+  .print-page-inner {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: var(--bg-primary);
+    position: relative;
+  }
+
+  .print-main {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-primary);
+  }
+
+  /* Screen preview separator */
+  @media screen {
+    .print-page { border-bottom: 3px solid #1F242C; }
+    body { background: #050810; }
+  }
+
+  /* Force print colors */
+  @media print {
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    /* Jump all animations to their end state */
+    *, *::before, *::after {
+      animation-delay: -99s !important;
+      animation-duration: 0.001s !important;
+      animation-iteration-count: 1 !important;
+      animation-fill-mode: both !important;
+      animation-play-state: running !important;
+      transition-duration: 0s !important;
+    }
+    /* Keep backdrop blurs as solid surfaces */
+    [style*="backdropFilter"], [style*="backdrop-filter"] {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="sidebar.jsx"></script>
+<script type="text/babel" src="briefing.jsx"></script>
+<script type="text/babel" src="draft.jsx"></script>
+<script type="text/babel" src="settings.jsx"></script>
+
+<script type="text/babel">
+  const PRINT_PROFILE = { firstName: 'Luke', title: 'Sales Director', company: 'Harrison Media', tone: 'Direct' };
+  const PRINT_TWEAKS  = { density: 'comfortable' };
+  const noop = () => {};
+
+  // Wrapper: sidebar + main content, fills print-page
+  function AppPage({ active, badgeCount, children }) {
+    return (
+      <div className="print-page">
+        <div className="print-page-inner">
+          <Sidebar
+            active={active}
+            onNavigate={noop}
+            briefingMeta={badgeCount || null}
+          />
+          <main className="print-main">
+            {/* Subtle bg flourish (matches live app) */}
+            <div aria-hidden style={{
+              position: 'absolute', inset: 0, pointerEvents: 'none',
+              background: 'radial-gradient(60% 40% at 50% -10%, rgba(201,168,76,0.04), transparent 70%)',
+            }} />
+            <div style={{ position: 'relative', height: '100%' }}>
+              {children}
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  function PrintApp() {
+    return (
+      <div>
+
+        {/* ── Page 1: Briefing ─────────────────────────── */}
+        <AppPage active="briefing" badgeCount="4">
+          <BriefingScreen
+            contacts={SAMPLE_CONTACTS}
+            onDraft={noop} onSnooze={noop} onComplete={noop} onOpenContact={noop}
+            pendingComplete={null} pendingConfirm={null}
+            profile={PRINT_PROFILE} tweaks={PRINT_TWEAKS}
+          />
+        </AppPage>
+
+        {/* ── Page 2: Draft message (Dan · reply state) ── */}
+        <AppPage active="briefing">
+          <DraftScreen
+            contact={SAMPLE_CONTACTS[0]}
+            onBack={noop} profile={PRINT_PROFILE}
+            onSendComplete={noop} onCopied={noop}
+          />
+        </AppPage>
+
+        {/* ── Page 3: Contacts list ───────────────────── */}
+        <AppPage active="contacts">
+          <ContactsScreen
+            contacts={SAMPLE_CONTACTS}
+            onOpen={noop} onDraft={noop}
+          />
+        </AppPage>
+
+        {/* ── Page 4: Settings ─────────────────────────── */}
+        <AppPage active="settings">
+          <SettingsScreen
+            profile={PRINT_PROFILE} setProfile={noop}
+            cadence="daily" setCadence={noop}
+          />
+        </AppPage>
+
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<PrintApp />);
+
+  // Auto-print once fonts + React have settled
+  document.fonts.ready.then(() => {
+    setTimeout(() => window.print(), 500);
+  });
+</script>
+</body>
+</html>

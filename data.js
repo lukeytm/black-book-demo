@@ -1,0 +1,152 @@
+// Black Book — sample data + helpers
+
+const SAMPLE_CONTACTS = [
+  {
+    id: 'dan',
+    name: 'Dan Cartwright',
+    company: 'GroupM',
+    role: 'Head of Partnerships',
+    heat: 'cooling',
+    heatLabel: 'Cooling',
+    days: 23,
+    initials: 'DC',
+    reason: 'Discussed a TripleLift proposal in April. He replied positively — you never followed up.',
+    signal: null,
+    summary: 'Dan is a senior partnership contact at GroupM. You\'ve exchanged 6 meaningful emails since January, most recently discussing a programmatic proposal for a major FMCG client. The relationship is warm but has cooled — last contact was 23 days ago with no reply to your follow-up.',
+    health: 'Warm relationship',
+    timeline: [
+      { date: '26 Apr', label: 'Proposal follow-up', detail: 'Dan replied positively, requested deck' },
+      { date: '14 Apr', label: 'Intro call', detail: 'Discussed Q3 retail media opportunities' },
+      { date: '2 Mar',  label: 'LinkedIn connection noted', detail: 'No email follow-up' },
+      { date: '18 Jan', label: 'First outreach', detail: 'Cold email, no reply' },
+    ],
+    history: [
+      { date: '14 May', text: 'Suggested follow-up · You drafted a message', status: 'Drafted' },
+    ],
+    draft: "Hey Dan — wanted to follow up on our conversation about the TripleLift proposal. Appreciate you taking the time to look it over last month.\n\nWould it make sense to reconnect this week and talk through next steps? Happy to keep it brief — 20 minutes would do it.\n\nBest,\nLuke",
+    lastTopic: 'TripleLift proposal',
+    threadSubject: 'TripleLift proposal',
+    newSubject: 'Reconnecting on TripleLift',
+  },
+  {
+    id: 'rachel',
+    name: 'Rachel Obi',
+    company: 'Boots',
+    role: 'Marketing Director',
+    heat: 'cold',
+    heatLabel: 'Gone cold',
+    days: 41,
+    initials: 'RO',
+    reason: 'Met at an event in March. Expressed interest in retail media. No contact since.',
+    signal: { kind: 'New role', text: 'Promoted to VP Marketing', when: '4 days ago' },
+    summary: 'Rachel is a senior marketing leader you met at an event in early March. She expressed clear interest in retail media measurement during your first conversation. The thread went quiet after a polite follow-up — now her role has changed.',
+    health: 'Worth rekindling',
+    timeline: [
+      { date: '11 Mar', label: 'Event follow-up', detail: 'Sent intro after Brand Innovators dinner — no reply' },
+      { date: '8 Mar', label: 'In-person introduction', detail: 'Discussed Boots retail media plans, exchanged cards' },
+    ],
+    history: [],
+    draft: "Hey Rachel — congratulations on the promotion to VP Marketing, well deserved.\n\nWe spoke earlier in the year about retail media and I've been doing some interesting work in that space since. Given your new remit, might be worth a conversation — happy to share what we're seeing.\n\nWorth a quick catch up?",
+    lastTopic: 'Retail media at Boots',
+    threadSubject: 'Great to meet at Brand Innovators',
+    newSubject: 'Congratulations on the VP role',
+  },
+  {
+    id: 'jamie',
+    name: 'Jamie Sloane',
+    company: 'Havas',
+    role: 'Programmatic Lead',
+    heat: 'warm',
+    heatLabel: 'Active',
+    days: 12,
+    initials: 'JS',
+    reason: 'Live campaign conversation. Your last message hasn\'t had a reply yet.',
+    signal: null,
+    summary: 'Jamie runs programmatic strategy at Havas. The current thread is live — you sent a campaign-flighting plan 12 days ago and are waiting on her sign-off. A short nudge is appropriate.',
+    health: 'Active conversation',
+    timeline: [
+      { date: '14 May', label: 'Sent campaign plan', detail: 'Awaiting feedback on flighting + frequency caps' },
+      { date: '9 May', label: 'Strategy call', detail: 'Aligned on Q3 budget envelope' },
+      { date: '24 Apr', label: 'Reintroduction', detail: 'Re-engaged after Havas reorganisation' },
+    ],
+    history: [],
+    draft: "Hey Jamie — just bumping this up your inbox. Whenever you have ten minutes to look over the flighting plan I'd love your read on the frequency caps.\n\nNo rush — let me know if it's easier to grab a quick call.",
+    lastTopic: 'Q3 campaign flighting',
+    threadSubject: 'Q3 campaign flighting plan',
+    newSubject: 'Q3 flighting — quick question',
+  },
+  {
+    id: 'priya',
+    name: 'Priya Mehta',
+    company: "Sainsbury's",
+    role: 'Head of Digital',
+    heat: 'dormant',
+    heatLabel: 'Dormant',
+    days: 213,
+    daysLabel: '7 months',
+    initials: 'PM',
+    reason: 'No contact in 7 months. A signal worth acting on just surfaced.',
+    signal: { kind: 'Company news', text: "Sainsbury's just announced a retail media network", when: '2 days ago' },
+    summary: "Priya runs digital at Sainsbury's. You had a productive thread last autumn about data clean rooms, but it never converted to a follow-up meeting. The Sainsbury's retail media announcement is a natural reason to re-open the conversation.",
+    health: 'Dormant — re-warmable',
+    timeline: [
+      { date: '21 Oct', label: 'Last reply', detail: '"Let\'s pick this up after the trading peak."' },
+      { date: '4 Oct', label: 'Sent data clean room overview', detail: 'Positive reply, asked for examples' },
+      { date: '28 Sep', label: 'Intro via Tom Bridges', detail: 'Warm intro email' },
+    ],
+    history: [],
+    draft: "Hi Priya — saw the Sainsbury's retail media announcement land this week, exciting moment. Congrats on getting it over the line.\n\nWe spoke last autumn about data clean rooms before you went into trading peak — given where Nectar360 is heading, might be worth picking the thread back up. Free for a coffee in the next couple of weeks?",
+    lastTopic: 'Data clean rooms (Oct)',
+    threadSubject: 'Data clean rooms',
+    newSubject: "Congrats on the Sainsbury's retail media launch",
+  },
+];
+
+const SIGNALS_FEED = [
+  {
+    contactId: 'rachel',
+    name: 'Rachel Obi', company: 'Boots',
+    kind: 'New role',
+    summary: 'Promoted to VP Marketing — leading combined media, performance and retail media teams.',
+    lastContact: '41 days ago',
+    initials: 'RO',
+  },
+  {
+    contactId: 'priya',
+    name: 'Priya Mehta', company: "Sainsbury's",
+    kind: 'Company news',
+    summary: "Sainsbury's announced a new retail media network this week, powered by Nectar360 first-party data.",
+    lastContact: '7 months ago',
+    initials: 'PM',
+  },
+  {
+    contactId: 'tom',
+    name: 'Tom Bridges', company: 'ITV',
+    kind: 'Company news',
+    summary: 'ITV adtech partnership announced with The Trade Desk — connected TV measurement focus.',
+    lastContact: '4 months ago',
+    initials: 'TB',
+  },
+];
+
+const CROSS_CLIENT_INSIGHTS = [
+  {
+    topic: 'Retail media measurement',
+    discussed: 'Discussed with 4 contacts this month',
+    dormant: '3 dormant contacts may find this relevant',
+  },
+  {
+    topic: 'Connected TV attribution',
+    discussed: 'Discussed with 3 contacts this month',
+    dormant: '2 dormant contacts may find this relevant',
+  },
+  {
+    topic: 'First-party data partnerships',
+    discussed: 'Discussed with 5 contacts this month',
+    dormant: '4 dormant contacts may find this relevant',
+  },
+];
+
+window.SAMPLE_CONTACTS = SAMPLE_CONTACTS;
+window.SIGNALS_FEED = SIGNALS_FEED;
+window.CROSS_CLIENT_INSIGHTS = CROSS_CLIENT_INSIGHTS;
