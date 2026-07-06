@@ -7,6 +7,7 @@ function dateFromDaysAgo(days) {
 }
 
 function DraftScreen({ contact, onBack, profile, onSendComplete, onCopied }) {
+  const isMobile = useIsMobile();
   const tone = profile.tone || 'Direct';
   const [draft, setDraft] = React.useState(contact.draft);
   const [copied, setCopied] = React.useState(false);
@@ -217,30 +218,32 @@ function DraftScreen({ contact, onBack, profile, onSendComplete, onCopied }) {
         {/* Cross-client insight */}
         {hasCrossClient && (
           <div className="fade-up" style={{
-            display: 'flex', gap: 12, alignItems: 'flex-start',
+            display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 12 : 12, alignItems: isMobile ? 'stretch' : 'flex-start',
             padding: '14px 16px 14px 14px',
             background: 'var(--accent-faint)',
             border: '1px solid var(--accent-border)',
             borderRadius: 10,
             marginBottom: 24,
           }}>
-            <div style={{
-              width: 28, height: 28, borderRadius: 6,
-              background: 'var(--accent-subtle)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--accent-glow)', flexShrink: 0,
-            }}>
-              <IconBulb size={15} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-glow)', letterSpacing: 0.02, marginBottom: 3, textTransform: 'uppercase' }}>
-                Cross-client insight
+            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: 6,
+                background: 'var(--accent-subtle)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--accent-glow)', flexShrink: 0,
+              }}>
+                <IconBulb size={15} />
               </div>
-              <div style={{ fontSize: 13.5, color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                You've discussed <span style={{ color: 'var(--text-primary)' }}>retail media measurement</span> with 3 other clients this month. This topic may resonate with {contact.name.split(' ')[0]} given {contact.id === 'rachel' ? 'her new role' : 'the Sainsbury\'s announcement'}.
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-glow)', letterSpacing: 0.02, marginBottom: 3, textTransform: 'uppercase' }}>
+                  Cross-client insight
+                </div>
+                <div style={{ fontSize: 13.5, color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                  You've discussed <span style={{ color: 'var(--text-primary)' }}>retail media measurement</span> with 3 other clients this month. This topic may resonate with {contact.name.split(' ')[0]} given {contact.id === 'rachel' ? 'her new role' : 'the Sainsbury\'s announcement'}.
+                </div>
               </div>
             </div>
-            <button className="btn btn-ghost btn-sm" onClick={handleAddInsight} style={{ flexShrink: 0 }}>
+            <button className="btn btn-ghost btn-sm" onClick={handleAddInsight} style={{ flexShrink: 0, alignSelf: isMobile ? 'stretch' : 'auto' }}>
               <IconPlus size={12} />
               Add to message
             </button>
@@ -275,21 +278,38 @@ function DraftScreen({ contact, onBack, profile, onSendComplete, onCopied }) {
           )}
         </div>
         </div>
+        {isMobile && (
+          <SendBar
+            mode={mode}
+            setMode={setMode}
+            threadExists={threadExists}
+            threadSubject={contact.threadSubject}
+            threadDate={threadDate}
+            subject={subject}
+            draft={draft}
+            sent={sent}
+            setSent={setSent}
+            onSendComplete={onSendComplete}
+            onCopied={onCopied}
+          />
+        )}
       </div>
 
-      <SendBar
-        mode={mode}
-        setMode={setMode}
-        threadExists={threadExists}
-        threadSubject={contact.threadSubject}
-        threadDate={threadDate}
-        subject={subject}
-        draft={draft}
-        sent={sent}
-        setSent={setSent}
-        onSendComplete={onSendComplete}
-        onCopied={onCopied}
-      />
+      {!isMobile && (
+        <SendBar
+          mode={mode}
+          setMode={setMode}
+          threadExists={threadExists}
+          threadSubject={contact.threadSubject}
+          threadDate={threadDate}
+          subject={subject}
+          draft={draft}
+          sent={sent}
+          setSent={setSent}
+          onSendComplete={onSendComplete}
+          onCopied={onCopied}
+        />
+      )}
     </div>
   );
 }
@@ -332,6 +352,7 @@ function TextLink({ onClick, children }) {
 }
 
 function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subject, draft, sent, setSent, onSendComplete, onCopied }) {
+  const isMobile = useIsMobile();
   const [copied, setCopied] = React.useState(false);
 
   const copy = () => {
@@ -357,7 +378,9 @@ function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subje
   const primaryLabel = mode === 'reply' ? 'Send reply' : 'Send now';
 
   return (
-    <div style={{
+    <div style={isMobile ? {
+      borderTop: '1px solid var(--border-subtle)',
+    } : {
       flexShrink: 0,
       borderTop: '1px solid var(--border-subtle)',
       background: 'color-mix(in oklab, var(--bg-primary) 88%, transparent)',
@@ -386,7 +409,7 @@ function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subje
             className="btn btn-primary btn-lg"
             onClick={send}
             disabled={!!sent}
-            style={{ flex: 1, minWidth: 200, ...(sent ? { pointerEvents: 'none', opacity: 0.95 } : {}) }}
+            style={{ flex: 1, minWidth: isMobile ? 0 : 200, ...(sent ? { pointerEvents: 'none', opacity: 0.95 } : {}) }}
           >
             {sent === 'sent'
               ? <><IconCheck size={16} /> Sent</>
@@ -399,7 +422,8 @@ function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subje
             className="btn btn-ghost btn-lg"
             onClick={copy}
             style={{
-              minWidth: 150,
+              flex: isMobile ? 1 : undefined,
+              minWidth: isMobile ? 0 : 150,
               color: copied ? 'var(--accent-glow)' : undefined,
               borderColor: copied ? 'var(--accent-border)' : undefined,
             }}
@@ -408,8 +432,8 @@ function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subje
           </button>
 
           {mode === 'new' && (
-            <button className="btn btn-ghost btn-lg" onClick={openGmail} title="Compose in Gmail instead">
-              <IconArrowUpRight size={14} /> Open in Gmail
+            <button className="btn btn-ghost btn-lg" onClick={openGmail} title="Compose in Gmail instead" style={isMobile ? { flex: 1, minWidth: 0 } : undefined}>
+              <IconArrowUpRight size={14} /> {isMobile ? 'Gmail' : 'Open in Gmail'}
             </button>
           )}
         </div>
