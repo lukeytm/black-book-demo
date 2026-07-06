@@ -92,7 +92,7 @@ const RESPONSE_SCHEMA = {
   additionalProperties: false,
 };
 
-function buildPrompt({ firstName, title, company, tone, sells, idealClient, dealSize, focus }) {
+function buildPrompt({ firstName, title, company, tone, sells, idealClient, focus }) {
   return `You are generating realistic BUT FICTIONAL sample data for a demo of "Black Book" — a relationship-management tool for salespeople. The visitor trying this demo works in the following context:
 
 Name: ${firstName}
@@ -101,7 +101,6 @@ Company: ${company}
 Communication tone: ${tone}
 What they sell: ${sells}
 Their ideal client: ${idealClient}
-Typical deal size: ${dealSize}
 Current focus: ${focus}
 
 Generate exactly 5 fictional contacts that would plausibly be in this person's professional network, given their industry and ideal client description. Use real, well-known company names appropriate to the industry (this is a common convention in sales demos), but invent plausible, generic-sounding fictional individual names for the people — do not depict any specific real person.
@@ -121,7 +120,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { firstName, title, company, tone, sells, idealClient, dealSize, focus } = req.body || {};
+  const { firstName, title, company, tone, sells, idealClient, focus } = req.body || {};
 
   if (!firstName || !company || !sells) {
     res.status(400).json({ error: "Missing required profile fields" });
@@ -136,7 +135,7 @@ module.exports = async (req, res) => {
       messages: [
         {
           role: "user",
-          content: buildPrompt({ firstName, title, company, tone, sells, idealClient, dealSize, focus }),
+          content: buildPrompt({ firstName, title, company, tone, sells, idealClient, focus }),
         },
       ],
     });

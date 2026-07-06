@@ -12,10 +12,33 @@ function App() {
   const [profile, setProfile] = React.useState(DEFAULT_PROFILE);
   const [cadence, setCadence] = React.useState('daily');
   const [contacts, setContacts] = React.useState(SAMPLE_CONTACTS);
-  const [businessInfo, setBusinessInfo] = React.useState({ sells: '', client: '', deal: '', focus: '' });
+  const [businessInfo, setBusinessInfo] = React.useState({ sells: '', client: '', focus: '' });
   const [generationStatus, setGenerationStatus] = React.useState('idle'); // idle | loading | ready | error
+  const [inferringBusiness, setInferringBusiness] = React.useState(false);
   const isMobile = useIsMobile();
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+
+  const inferBusinessInfo = () => {
+    setInferringBusiness(true);
+    fetch('/api/infer-business', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: profile.title, company: profile.company }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Inference request failed');
+        return res.json();
+      })
+      .then((data) => {
+        setBusinessInfo((prev) => ({
+          sells: prev.sells || data.sells || '',
+          client: prev.client || data.client || '',
+          focus: prev.focus || data.focus || '',
+        }));
+      })
+      .catch(() => {}) // silent — fields just stay empty, user can type their own
+      .finally(() => setInferringBusiness(false));
+  };
 
   const runGeneration = () => {
     setGenerationStatus('loading');
@@ -29,7 +52,6 @@ function App() {
         tone: profile.tone,
         sells: businessInfo.sells,
         idealClient: businessInfo.client,
-        dealSize: businessInfo.deal,
         focus: businessInfo.focus,
       }),
     })
@@ -150,12 +172,17 @@ function App() {
           <OnboardingWelcome onNext={() => setRoute('onboarding-details')} />
         )}
         {route === 'onboarding-details' && (
-          <OnboardingDetails profile={profile} setProfile={setProfile} onNext={() => setRoute('onboarding-review')} />
+          <OnboardingDetails
+            profile={profile}
+            setProfile={setProfile}
+            onNext={() => { inferBusinessInfo(); setRoute('onboarding-review'); }}
+          />
         )}
         {route === 'onboarding-review' && (
           <OnboardingReview
             data={businessInfo}
             setData={setBusinessInfo}
+            inferring={inferringBusiness}
             onDone={() => { runGeneration(); setRoute('onboarding-scanning'); }}
           />
         )}

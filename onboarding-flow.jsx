@@ -342,7 +342,7 @@ function ReviewField({ label, value, onChange, multiline, editAll, placeholder }
   );
 }
 
-function OnboardingReview({ data, setData, onDone }) {
+function OnboardingReview({ data, setData, onDone, inferring }) {
   const set = (k) => (v) => setData((d) => ({ ...d, [k]: v }));
   const canContinue = data.sells.trim().length > 0 && data.client.trim().length > 0;
 
@@ -357,16 +357,17 @@ function OnboardingReview({ data, setData, onDone }) {
             Tell us about your business.
           </h1>
           <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 14.5, lineHeight: 1.55 }}>
-            We'll generate a sample book of plausible contacts and drafts around this — nothing here is sent anywhere or connected to a real inbox.
+            {inferring
+              ? "Taking a first guess based on your title and company — edit anything below."
+              : "We'll generate a sample book of plausible contacts and drafts around this — nothing here is sent anywhere or connected to a real inbox."}
           </p>
         </div>
 
         {/* Card */}
         <div className="card" style={{ padding: '6px 22px 22px' }}>
-          <ReviewField label="What you sell"     value={data.sells}  onChange={set('sells')}  placeholder="Programmatic ad inventory and sponsorship packages" multiline editAll />
-          <ReviewField label="Your ideal client" value={data.client} onChange={set('client')} placeholder="Brand and agency marketing leads at mid-market companies" multiline editAll />
-          <ReviewField label="Typical deal size" value={data.deal}   onChange={set('deal')}   placeholder="£40k – £120k per campaign" editAll />
-          <ReviewField label="Current focus"     value={data.focus} onChange={set('focus')}  placeholder="Reviving lapsed relationships from last year" multiline editAll />
+          <ReviewField label="What you sell"     value={data.sells}  onChange={set('sells')}  placeholder={inferring ? 'Thinking…' : 'Programmatic ad inventory and sponsorship packages'} multiline editAll />
+          <ReviewField label="Your ideal client" value={data.client} onChange={set('client')} placeholder={inferring ? 'Thinking…' : 'Brand and agency marketing leads at mid-market companies'} multiline editAll />
+          <ReviewField label="Current focus"     value={data.focus} onChange={set('focus')}  placeholder={inferring ? 'Thinking…' : 'Reviving lapsed relationships from last year'} multiline editAll />
         </div>
 
         {/* Actions */}
