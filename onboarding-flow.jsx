@@ -230,22 +230,30 @@ function OnboardingScanning({ onDone, ready, error, onRetry, onUseFallback }) {
         {/* Progress */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <span style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>
-              {finished && ready ? 'Done' : finished ? 'Finishing up' : 'Generating'}
+            <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {waiting && !ready && <span className="spinner" aria-hidden="true" />}
+              {finished && ready ? 'Done' : waiting ? 'Almost there — writing your drafts' : 'Generating'}
             </span>
-            <span style={{
-              fontSize: 12.5, fontWeight: 600,
-              color: finished ? 'var(--accent-glow)' : 'var(--text-tertiary)',
-              fontVariantNumeric: 'tabular-nums',
-            }}>{pct}%</span>
+            {!(waiting && !ready) && (
+              <span style={{
+                fontSize: 12.5, fontWeight: 600,
+                color: finished ? 'var(--accent-glow)' : 'var(--text-tertiary)',
+                fontVariantNumeric: 'tabular-nums',
+              }}>{pct}%</span>
+            )}
           </div>
           <div style={{
+            position: 'relative',
             height: 4, borderRadius: 999, background: 'var(--border-subtle)', overflow: 'hidden',
           }}>
-            <div style={{
-              height: '100%', width: `${pct}%`, background: 'var(--accent)', borderRadius: 999,
-              transition: 'width 600ms cubic-bezier(0.4,0,0.2,1)',
-            }} />
+            {waiting && !ready ? (
+              <div className="progress-indeterminate" />
+            ) : (
+              <div style={{
+                height: '100%', width: `${pct}%`, background: 'var(--accent)', borderRadius: 999,
+                transition: 'width 600ms cubic-bezier(0.4,0,0.2,1)',
+              }} />
+            )}
           </div>
         </div>
       </div>
