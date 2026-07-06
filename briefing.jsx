@@ -93,6 +93,7 @@ function BriefingScreen({ contacts, onDraft, onSnooze, onComplete, onOpenContact
 
 function ContactCard({ contact, onDraft, onSnooze, onOpen, onConfirmSend, onRemindLater, dismissing, needsConfirm, density, style }) {
   const [hover, setHover] = React.useState(false);
+  const isMobile = useIsMobile();
   const heatColor = `var(--heat-${contact.heat})`;
   const compact = density === 'compact';
 
@@ -161,10 +162,10 @@ function ContactCard({ contact, onDraft, onSnooze, onOpen, onConfirmSend, onRemi
           style={{
             flex: 1,
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) auto',
-            gap: 20,
+            gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1fr) auto',
+            gap: isMobile ? 14 : 20,
             padding: compact ? '16px 20px' : '20px 22px',
-            alignItems: 'center',
+            alignItems: isMobile ? 'stretch' : 'center',
             minWidth: 0,
             cursor: 'pointer',
           }}>
@@ -203,16 +204,16 @@ function ContactCard({ contact, onDraft, onSnooze, onOpen, onConfirmSend, onRemi
           </div>
 
           {/* Right content */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, minWidth: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'stretch' : 'flex-end', gap: 10, minWidth: 0 }}>
             {contact.signal && (
               <SignalBadge signal={contact.signal} size="sm" />
             )}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 140 }}>
-              <button className="btn btn-primary btn-sm" onClick={(e) => { e.stopPropagation(); onDraft(); }}>
+            <div style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', gap: 6, width: isMobile ? '100%' : 140 }}>
+              <button className="btn btn-primary btn-sm" style={isMobile ? { flex: 1 } : undefined} onClick={(e) => { e.stopPropagation(); onDraft(); }}>
                 <IconEdit size={13} />
                 Draft message
               </button>
-              <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); onSnooze(); }}>Not now</button>
+              <button className="btn btn-ghost btn-sm" style={isMobile ? { flex: 1 } : undefined} onClick={(e) => { e.stopPropagation(); onSnooze(); }}>Not now</button>
             </div>
           </div>
         </div>

@@ -313,7 +313,8 @@ function App() {
 
 // Floating bottom bar — quick jump to any screen for demo navigation
 function BottomBar({ route, setRoute }) {
-  const [open, setOpen] = React.useState(true);
+  const isMobile = useIsMobile();
+  const [open, setOpen] = React.useState(() => !isMobile);
   const screens = [
     { id: 'onboarding-welcome', label: '1 · Connect' },
     { id: 'onboarding-scanning', label: '2 · Scanning' },
@@ -351,14 +352,16 @@ function BottomBar({ route, setRoute }) {
         onClick={() => setOpen(!open)}
         title="Demo: jump to screen"
         style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          padding: '6px 11px 6px 9px', borderRadius: 999,
+          display: 'flex', alignItems: 'center', gap: isMobile && !open ? 0 : 6,
+          padding: isMobile && !open ? '7px' : '6px 11px 6px 9px', borderRadius: 999,
           fontSize: 11, fontWeight: 600, color: 'var(--accent-glow)',
           letterSpacing: '0.04em', textTransform: 'uppercase',
         }}>
         <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)' }} />
-        Demo
-        <IconChevronDown size={11} style={{ transform: open ? 'rotate(0)' : 'rotate(-90deg)', transition: 'transform 200ms' }} />
+        {!(isMobile && !open) && 'Demo'}
+        {!(isMobile && !open) && (
+          <IconChevronDown size={11} style={{ transform: open ? 'rotate(0)' : 'rotate(-90deg)', transition: 'transform 200ms' }} />
+        )}
       </button>
       {open && (
         <div style={{ display: 'flex', gap: 2, padding: '0 2px', maxWidth: '70vw', overflowX: 'auto' }}>
