@@ -7,10 +7,21 @@ const NAV_ITEMS = [
   { id: 'settings', label: 'Settings', Icon: IconSettings },
 ];
 
-function Sidebar({ active, onNavigate, briefingMeta, theme, setTheme }) {
+function Sidebar({ active, onNavigate, briefingMeta, theme, setTheme, mobile, open, onClose }) {
+  const mobileStyle = mobile ? {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 50,
+    width: 'min(260px, 82vw)',
+    transform: open ? 'translateX(0)' : 'translateX(-100%)',
+    transition: 'transform 220ms cubic-bezier(0.4,0,0.2,1)',
+    boxShadow: open ? '8px 0 32px rgba(0,0,0,0.45)' : 'none',
+  } : {};
+
   return (
     <aside style={{
-      width: 260,
+      width: mobile ? undefined : 260,
       flexShrink: 0,
       background: 'var(--bg-primary)',
       borderRight: '1px solid var(--border-subtle)',
@@ -18,6 +29,7 @@ function Sidebar({ active, onNavigate, briefingMeta, theme, setTheme }) {
       flexDirection: 'column',
       padding: '22px 16px 18px 18px',
       height: '100%',
+      ...mobileStyle,
     }}>
       {/* Wordmark */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 4px 22px', }}>
@@ -35,6 +47,18 @@ function Sidebar({ active, onNavigate, briefingMeta, theme, setTheme }) {
           color: 'var(--text-tertiary)',
           textTransform: 'uppercase',
         }}>v0.1</div>
+        {mobile && (
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            style={{
+              marginLeft: 8, width: 28, height: 28, borderRadius: 8,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--text-secondary)', fontSize: 18, lineHeight: 1,
+              background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+            }}
+          >×</button>
+        )}
       </div>
 
       {/* Quick add — removed for now (email-only flow) */}
@@ -47,7 +71,7 @@ function Sidebar({ active, onNavigate, briefingMeta, theme, setTheme }) {
           return (
             <button
               key={item.id}
-              onClick={() => onNavigate(item.id)}
+              onClick={() => { onNavigate(item.id); if (mobile && onClose) onClose(); }}
               style={{
                 position: 'relative',
                 display: 'flex',

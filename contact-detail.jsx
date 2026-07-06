@@ -6,7 +6,7 @@ function ContactDetailScreen({ contact, onBack, onDraft }) {
 
   return (
     <div className="scroll-area" style={{ height: '100%', overflowY: 'auto' }}>
-      <div style={{ maxWidth: 820, margin: '0 auto', padding: '32px 48px 64px' }}>
+      <div style={{ maxWidth: 820, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 64px' }}>
         {/* Back */}
         <button
           onClick={onBack}

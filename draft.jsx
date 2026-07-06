@@ -46,7 +46,7 @@ function DraftScreen({ contact, onBack, profile, onSendComplete, onCopied }) {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div className="scroll-area" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
-        <div style={{ maxWidth: 820, margin: '0 auto', padding: '32px 48px 28px' }}>
+        <div style={{ maxWidth: 820, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 28px' }}>
         {/* Back row */}
         <button
           onClick={onBack}
@@ -364,7 +364,7 @@ function SendBar({ mode, setMode, threadExists, threadSubject, threadDate, subje
       backdropFilter: 'blur(18px)',
       WebkitBackdropFilter: 'blur(18px)',
     }}>
-      <div style={{ maxWidth: 820, margin: '0 auto', padding: '14px 48px 16px' }}>
+      <div style={{ maxWidth: 820, margin: '0 auto', padding: '14px var(--screen-pad-h) 16px' }}>
         {/* Thread context — confirmatory, muted */}
         {mode === 'reply' && (
           <div style={{

@@ -39,6 +39,11 @@
   --radius-lg: 14px;
   --radius-xl: 20px;
 
+  /* Screen container padding — overridden below on narrow viewports */
+  --screen-pad-v: 40px;
+  --screen-pad-h: 48px;
+  --sidebar-width: 260px;
+
   /* Shadows — restrained; depth over glow */
   --shadow-card: 0 1px 0 rgba(255,255,255,0.02) inset, 0 8px 26px rgba(0,0,0,0.42);
   --shadow-glow: 0 0 0 1px rgba(201,168,76,0.22), 0 6px 22px rgba(201,168,76,0.07);
@@ -362,4 +367,52 @@ input, textarea {
 ::selection {
   background: var(--accent-subtle);
   color: var(--text-primary);
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  :root {
+    --screen-pad-v: 20px;
+    --screen-pad-h: 16px;
+  }
+
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 19px !important; }
+}
+
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 40;
+}
+
+.mobile-topbar {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .mobile-topbar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
 }

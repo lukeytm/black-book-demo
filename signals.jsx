@@ -3,7 +3,7 @@
 function SignalsScreen({ onDraft, onOpenContact }) {
   return (
     <div className="scroll-area" style={{ height: '100%', overflowY: 'auto' }}>
-      <div style={{ maxWidth: 920, margin: '0 auto', padding: '40px 48px 56px' }}>
+      <div style={{ maxWidth: 920, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 56px' }}>
         <div className="fade-up" style={{ marginBottom: 28 }}>
           <h1 style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.025em', margin: '0 0 8px' }}>
             Signals

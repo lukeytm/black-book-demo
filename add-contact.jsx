@@ -54,7 +54,7 @@ function AddContactScreen({ onBack, onAdded }) {
 
   return (
     <div className="scroll-area" style={{ height: '100%', overflowY: 'auto' }}>
-      <div style={{ maxWidth: 560, margin: '0 auto', padding: '40px 48px 64px' }}>
+      <div style={{ maxWidth: 560, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 64px' }}>
 
         <button
           onClick={onBack}

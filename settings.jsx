@@ -9,7 +9,7 @@ function SettingsScreen({ profile, setProfile, cadence, setCadence }) {
 
   return (
     <div className="scroll-area" style={{ height: '100%', overflowY: 'auto' }}>
-      <div style={{ maxWidth: 800, margin: '0 auto', padding: '40px 48px 64px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 64px' }}>
         <div className="fade-up" style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.025em', margin: '0 0 6px' }}>
             Settings
@@ -346,7 +346,7 @@ function ContactsScreen({ contacts, onOpen, onDraft }) {
 
   return (
     <div className="scroll-area" style={{ height: '100%', overflowY: 'auto' }}>
-      <div style={{ maxWidth: 920, margin: '0 auto', padding: '40px 48px 56px' }}>
+      <div style={{ maxWidth: 920, margin: '0 auto', padding: 'var(--screen-pad-v) var(--screen-pad-h) 56px' }}>
         <div className="fade-up" style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.025em', margin: '0 0 6px' }}>
             Contacts

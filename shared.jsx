@@ -1,5 +1,18 @@
 // Black Book — shared UI bits used across screens
 
+function useIsMobile(breakpoint = 720) {
+  const [isMobile, setIsMobile] = React.useState(() =>
+    typeof window !== 'undefined' && window.innerWidth <= breakpoint
+  );
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const onChange = (e) => setIsMobile(e.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 function Avatar({ initials, size = 36, heat }) {
   const heatBg = {
     warm: 'linear-gradient(135deg, #5FBE8C, #2F6B4B)',
@@ -67,4 +80,4 @@ function ScreenHeader({ title, subtitle, right }) {
   );
 }
 
-Object.assign(window, { Avatar, HeatLabel, SignalBadge, ScreenHeader });
+Object.assign(window, { useIsMobile, Avatar, HeatLabel, SignalBadge, ScreenHeader });

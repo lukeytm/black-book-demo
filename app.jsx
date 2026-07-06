@@ -14,6 +14,8 @@ function App() {
   const [contacts, setContacts] = React.useState(SAMPLE_CONTACTS);
   const [businessInfo, setBusinessInfo] = React.useState({ sells: '', client: '', deal: '', focus: '' });
   const [generationStatus, setGenerationStatus] = React.useState('idle'); // idle | loading | ready | error
+  const isMobile = useIsMobile();
+  const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
 
   const runGeneration = () => {
     setGenerationStatus('loading');
@@ -194,20 +196,40 @@ function App() {
         briefingMeta={visibleCount > 0 && sidebarActive === 'briefing' && route === 'briefing' ? String(visibleCount) : null}
         theme={theme}
         setTheme={setTheme}
+        mobile={isMobile}
+        open={!isMobile || mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
       />
+      {isMobile && mobileNavOpen && (
+        <div className="mobile-nav-backdrop" onClick={() => setMobileNavOpen(false)} />
+      )}
       <main style={{
         flex: 1, minWidth: 0, height: '100%',
         background: 'var(--bg-primary)',
         position: 'relative',
         overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
       }}>
+        {isMobile && (
+          <div className="mobile-topbar">
+            <button onClick={() => setMobileNavOpen(true)} aria-label="Open menu">
+              <div style={{ width: 15, height: 11, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+                <span style={{ display: 'block', height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+              </div>
+            </button>
+            <div className="wordmark" style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)' }}>My Black Book</div>
+          </div>
+        )}
         {/* Background flourish */}
         <div aria-hidden style={{
           position: 'absolute', inset: 0,
           background: 'radial-gradient(60% 40% at 50% -10%, rgba(201,168,76,0.05), transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <div style={{ position: 'relative', height: '100%' }}>
+        <div style={{ position: 'relative', height: '100%', flex: 1, minHeight: 0 }}>
           {route === 'briefing' && (
             <BriefingScreen
               contacts={contacts}
