@@ -169,7 +169,10 @@ function App() {
     return (
       <div style={{ height: '100%', width: '100%' }} data-screen-label={`${route}`}>
         {route === 'onboarding-welcome' && (
-          <OnboardingWelcome onNext={() => setRoute('onboarding-details')} />
+          <OnboardingWelcome onNext={() => {
+            setProfile({ firstName: '', title: '', company: '', tone: 'Direct' });
+            setRoute('onboarding-details');
+          }} />
         )}
         {route === 'onboarding-details' && (
           <OnboardingDetails
