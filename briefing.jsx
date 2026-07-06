@@ -156,21 +156,24 @@ function ContactCard({ contact, onDraft, onSnooze, onOpen, onConfirmSend, onRemi
         </div>
       ) : (
         /* ── Normal state ───────────────────────────────────── */
-        <div style={{
-          flex: 1,
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) auto',
-          gap: 20,
-          padding: compact ? '16px 20px' : '20px 22px',
-          alignItems: 'center',
-          minWidth: 0,
-        }}>
+        <div
+          onClick={onDraft}
+          style={{
+            flex: 1,
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) auto',
+            gap: 20,
+            padding: compact ? '16px 20px' : '20px 22px',
+            alignItems: 'center',
+            minWidth: 0,
+            cursor: 'pointer',
+          }}>
           {/* Left content */}
           <div style={{ minWidth: 0, display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <Avatar initials={contact.initials} heat={contact.heat} size={compact ? 36 : 42} />
             <div style={{ minWidth: 0, flex: 1 }}>
               <div
-                onClick={onOpen}
+                onClick={(e) => { e.stopPropagation(); onOpen(); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3,
                   cursor: 'pointer',
@@ -205,11 +208,11 @@ function ContactCard({ contact, onDraft, onSnooze, onOpen, onConfirmSend, onRemi
               <SignalBadge signal={contact.signal} size="sm" />
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 140 }}>
-              <button className="btn btn-primary btn-sm" onClick={onDraft}>
+              <button className="btn btn-primary btn-sm" onClick={(e) => { e.stopPropagation(); onDraft(); }}>
                 <IconEdit size={13} />
                 Draft message
               </button>
-              <button className="btn btn-ghost btn-sm" onClick={onSnooze}>Not now</button>
+              <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); onSnooze(); }}>Not now</button>
             </div>
           </div>
         </div>
