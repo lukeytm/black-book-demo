@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/generate.js": { "maxDuration": 60 },
+    "api/infer-business.js": { "maxDuration": 30 }
+  }
+}

@@ -103,9 +103,11 @@ What they sell: ${sells}
 Their ideal client: ${idealClient}
 Current focus: ${focus}
 
-Generate exactly 5 fictional contacts that would plausibly be in this person's professional network, given their industry and ideal client description. Use real, well-known company names appropriate to the industry (this is a common convention in sales demos), but invent plausible, generic-sounding fictional individual names for the people — do not depict any specific real person.
+Generate EXACTLY 5 fictional contacts — no more, no fewer — that would plausibly be in this person's professional network, given their industry and ideal client description. Use real, well-known company names appropriate to the industry (this is a common convention in sales demos), but invent plausible, generic-sounding fictional individual names for the people — do not depict any specific real person.
 
 Distribute contacts across relationship states: 1 "warm" (active live conversation), 1 "cooling", 1 "cold", and 2 "dormant" (one of which should have a "signal" — a plausible, generic, invented piece of recent company news about their employer that creates a natural reason to reach back out; the other dormant contact can have signal: null). The warm/cooling/cold contacts should have signal: null.
+
+Keep every contact's text fields tight and fast to generate: "summary" is 1-2 sentences, "draft" is 1-2 short paragraphs, and "timeline" has exactly 2 entries. This is a speed-sensitive live demo, so brevity matters more than exhaustive detail.
 
 Each contact's "draft" field should be a warm, on-brand outreach message written in the visitor's stated tone (${tone}), referencing the "reason" and, where present, the signal — written as if from ${firstName} at ${company}.
 
